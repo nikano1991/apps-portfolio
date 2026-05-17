@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Article — Marc Oliveras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #07070f;
+      --card: rgba(255,255,255,0.03);
+      --card-border: rgba(255,255,255,0.08);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 10%, rgba(99,102,241,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 90%, rgba(236,72,153,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 120px;
+    }
+
+    .top-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .app-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 6px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .app-chip:hover {
+      color: var(--text);
+      border-color: rgba(255,255,255,0.18);
+      transform: translateX(-2px);
+    }
+
+    .app-chip img {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+    }
+
+    .home-link {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .home-link:hover { color: var(--text-muted); }
+
+    /* ===== Markdown article styles ===== */
+    .article {
+      font-size: 17px;
+      line-height: 1.78;
+      color: #e2e8f0;
+    }
+
+    .article h1 {
+      font-size: clamp(32px, 5vw, 44px);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.1;
+      margin: 0 0 32px;
+      background: linear-gradient(170deg, #f1f5f9 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .article h2 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 56px 0 18px;
+      padding-top: 8px;
+      color: var(--text);
+    }
+
+    .article h3 {
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 40px 0 14px;
+      color: var(--text);
+    }
+
+    .article h4 {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 32px 0 10px;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .article p {
+      margin: 0 0 22px;
+      color: #cbd5e1;
+    }
+
+    .article a {
+      color: #818cf8;
+      text-decoration: underline;
+      text-decoration-color: rgba(129,140,248,0.4);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+    }
+
+    .article a:hover { text-decoration-color: #818cf8; }
+
+    .article strong { color: var(--text); font-weight: 700; }
+    .article em { color: #cbd5e1; }
+
+    .article ul, .article ol {
+      margin: 0 0 22px 24px;
+      color: #cbd5e1;
+    }
+
+    .article li { margin-bottom: 8px; }
+
+    .article blockquote {
+      margin: 28px 0;
+      padding: 18px 24px;
+      background: rgba(99,102,241,0.06);
+      border-left: 3px solid #818cf8;
+      border-radius: 0 12px 12px 0;
+      color: #cbd5e1;
+      font-style: italic;
+    }
+
+    .article blockquote p { margin-bottom: 10px; }
+    .article blockquote p:last-child { margin-bottom: 0; }
+    .article blockquote strong { color: #c7d2fe; font-style: normal; }
+
+    .article hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+      margin: 48px 0;
+    }
+
+    .article code {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.88em;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--card-border);
+      padding: 2px 6px;
+      border-radius: 5px;
+      color: #f1f5f9;
+    }
+
+    .article pre {
+      margin: 0 0 24px;
+      padding: 20px 22px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      overflow-x: auto;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .article pre code {
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+      color: #e2e8f0;
+    }
+
+    .article img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin: 24px 0;
+      display: block;
+    }
+
+    .article table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 0 24px;
+      font-size: 15px;
+    }
+
+    .article th, .article td {
+      padding: 10px 14px;
+      border: 1px solid var(--card-border);
+      text-align: left;
+    }
+
+    .article th {
+      background: rgba(255,255,255,0.04);
+      font-weight: 700;
+    }
+
+    .footer-nav {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .loading, .error {
+      text-align: center;
+      padding: 80px 24px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 600px) {
+      .article { font-size: 16px; }
+      .article h2 { font-size: 24px; margin-top: 44px; }
+      .article h3 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient" aria-hidden="true"></div>
+  <main class="wrap">
+    <nav class="top-bar" id="topBar">
+      <a class="home-link" href="index.html">Portfolio</a>
+    </nav>
+
+    <article class="article" id="article">
+      <div class="loading">Loading article…</div>
+    </article>
+
+    <div class="footer-nav" id="footerNav" hidden>
+      <a class="app-chip" id="footerChip" href="#">
+        <span aria-hidden="true">←</span>
+        More articles
+      </a>
+      <a class="home-link" href="index.html">Back to portfolio</a>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+  <script>
+    const APPS = {
+      'el-pelegri': {
+        name: 'El Pelegrí',
+        color: '#22c55e',
+        iconUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/4c/63/62/4c6362e8-ca55-54db-2cc6-68f8f9fd5737/AppIcon-1x_U007epad-0-1-85-220-0.jpeg/512x512bb.jpg'
+      }
+    };
+
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('app');
+    const n = params.get('n');
+    const app = APPS[slug];
+    const articleEl = document.getElementById('article');
+    const topBar = document.getElementById('topBar');
+    const footerNav = document.getElementById('footerNav');
+    const footerChip = document.getElementById('footerChip');
+
+    if (!app || !n || !/^\d{2}$/.test(n)) {
+      articleEl.innerHTML = `<div class="error">Article not found.</div>`;
+    } else {
+      const backHref = `articles.html?app=${slug}`;
+      const chip = document.createElement('a');
+      chip.className = 'app-chip';
+      chip.href = backHref;
+      chip.innerHTML = `<img src="${app.iconUrl}" alt=""><span>← ${escapeHtml(app.name)} articles</span>`;
+      topBar.insertBefore(chip, topBar.firstChild);
+
+      footerChip.href = backHref;
+      footerChip.innerHTML = `<img src="${app.iconUrl}" alt=""><span>← More ${escapeHtml(app.name)} articles</span>`;
+
+      loadArticle(slug, n);
+    }
+
+    async function loadArticle(slug, n) {
+      const url = `${slug}/${n}-article-${slug}.md`;
+      try {
+        const res = await fetch(url, { cache: 'no-cache' });
+        if (!res.ok) throw new Error('Not found');
+        const md = await res.text();
+        const html = DOMPurify.sanitize(marked.parse(md));
+        articleEl.innerHTML = html;
+        footerNav.hidden = false;
+        const h1 = articleEl.querySelector('h1');
+        if (h1) document.title = `${h1.textContent} — ${app.name}`;
+      } catch (e) {
+        articleEl.innerHTML = `<div class="error">Could not load this article.</div>`;
+      }
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+  </script>
+</body>
+</html>

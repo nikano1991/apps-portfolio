@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journey Articles — Marc Oliveras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #07070f;
+      --card: rgba(255,255,255,0.03);
+      --card-border: rgba(255,255,255,0.08);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 10%, rgba(99,102,241,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 90%, rgba(236,72,153,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px 96px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--card-border);
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--text);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateX(-2px);
+    }
+
+    .page-header {
+      margin: 40px 0 48px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .page-app-icon {
+      width: 92px;
+      height: 92px;
+      border-radius: 22px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+    }
+
+    .page-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--color, #818cf8);
+      margin-bottom: 8px;
+    }
+
+    .page-title {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.05;
+    }
+
+    .page-subtitle {
+      margin-top: 10px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .article-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .article-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, var(--color-glow, rgba(99,102,241,0.15)) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--color-border, rgba(255,255,255,0.18));
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+
+    .article-card:hover::before { opacity: 1; }
+
+    .article-card > * { position: relative; }
+
+    .article-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px 5px 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      width: fit-content;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .article-chip img {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+    }
+
+    .article-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--color, #818cf8);
+      text-transform: uppercase;
+    }
+
+    .article-title {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.4px;
+    }
+
+    .article-excerpt {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .article-read {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color, #818cf8);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .empty, .loading {
+      text-align: center;
+      padding: 80px 24px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .skeleton {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      height: 220px;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 0.9; }
+    }
+
+    @media (max-width: 600px) {
+      .page-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .page-app-icon { width: 72px; height: 72px; border-radius: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient" aria-hidden="true"></div>
+  <main class="wrap">
+    <a class="back-link" href="index.html">
+      <span aria-hidden="true">←</span> Back to portfolio
+    </a>
+
+    <header class="page-header" id="pageHeader">
+      <div id="headerSlot" style="flex:1;">
+        <div class="page-eyebrow">Loading…</div>
+        <div class="page-title">Journey Articles</div>
+      </div>
+    </header>
+
+    <div id="grid" class="articles-grid">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+  </main>
+
+  <script>
+    const APPS = {
+      'el-pelegri': {
+        name: 'El Pelegrí',
+        color: '#22c55e',
+        colorGlow: 'rgba(34,197,94,0.18)',
+        colorBorder: 'rgba(34,197,94,0.3)',
+        iconUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/4c/63/62/4c6362e8-ca55-54db-2cc6-68f8f9fd5737/AppIcon-1x_U007epad-0-1-85-220-0.jpeg/512x512bb.jpg'
+      }
+    };
+
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('app');
+    const app = APPS[slug];
+
+    const headerEl = document.getElementById('pageHeader');
+    const headerSlot = document.getElementById('headerSlot');
+    const gridEl = document.getElementById('grid');
+
+    if (!app) {
+      document.title = 'Unknown app — Journey Articles';
+      headerSlot.innerHTML = `
+        <div class="page-eyebrow">Not found</div>
+        <div class="page-title">Unknown app</div>
+        <p class="page-subtitle">No journey articles for "${slug || ''}".</p>`;
+      gridEl.innerHTML = '';
+    } else {
+      document.title = `${app.name} — Journey Articles`;
+      headerEl.style.setProperty('--color', app.color);
+      headerSlot.innerHTML = `
+        <div class="page-eyebrow" style="color:${app.color}">${app.name}</div>
+        <div class="page-title">Journey Articles</div>
+        <p class="page-subtitle">The story behind the app — decisions, dead ends, and the wins worth writing down.</p>`;
+      const iconImg = document.createElement('img');
+      iconImg.className = 'page-app-icon';
+      iconImg.src = app.iconUrl;
+      iconImg.alt = `${app.name} icon`;
+      headerEl.insertBefore(iconImg, headerSlot);
+
+      loadArticles(slug, app);
+    }
+
+    async function loadArticles(slug, app) {
+      const found = [];
+      for (let i = 1; i <= 99; i++) {
+        const n = String(i).padStart(2, '0');
+        const url = `${slug}/${n}-article-${slug}.md`;
+        try {
+          const res = await fetch(url, { cache: 'no-cache' });
+          if (!res.ok) break;
+          const text = await res.text();
+          found.push({ n, url, text });
+        } catch (e) {
+          break;
+        }
+      }
+
+      if (found.length === 0) {
+        gridEl.innerHTML = `<div class="empty">No articles yet. Check back soon.</div>`;
+        return;
+      }
+
+      gridEl.innerHTML = '';
+      for (const item of found) {
+        const { title, excerpt } = parseMarkdownMeta(item.text);
+        const card = document.createElement('a');
+        card.className = 'article-card';
+        card.href = `article.html?app=${slug}&n=${item.n}`;
+        card.style.setProperty('--color', app.color);
+        card.style.setProperty('--color-glow', app.colorGlow);
+        card.style.setProperty('--color-border', app.colorBorder);
+        card.innerHTML = `
+          <span class="article-chip">
+            <img src="${app.iconUrl}" alt="">
+            ${app.name}
+          </span>
+          <div class="article-num">Article ${item.n}</div>
+          <h2 class="article-title">${escapeHtml(title)}</h2>
+          <p class="article-excerpt">${escapeHtml(excerpt)}</p>
+          <span class="article-read">Read article →</span>
+        `;
+        gridEl.appendChild(card);
+      }
+    }
+
+    function parseMarkdownMeta(md) {
+      const lines = md.split('\n');
+      let title = 'Untitled';
+      for (const line of lines) {
+        const m = line.match(/^#\s+(.+?)\s*$/);
+        if (m) { title = stripInlineMd(m[1]); break; }
+      }
+      let excerpt = '';
+      let i = 0;
+      while (i < lines.length) {
+        const line = lines[i].trim();
+        if (!line || line.startsWith('#') || line.startsWith('>') || line.startsWith('---') || line.startsWith('![') || line.startsWith('```')) {
+          i++; continue;
+        }
+        const buf = [line];
+        i++;
+        while (i < lines.length && lines[i].trim() && !lines[i].startsWith('#') && !lines[i].startsWith('>')) {
+          buf.push(lines[i].trim());
+          i++;
+        }
+        excerpt = stripInlineMd(buf.join(' '));
+        break;
+      }
+      if (excerpt.length > 180) excerpt = excerpt.slice(0, 177).trimEnd() + '…';
+      return { title, excerpt };
+    }
+
+    function stripInlineMd(s) {
+      return s
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/\*(.+?)\*/g, '$1')
+        .replace(/_(.+?)_/g, '$1')
+        .replace(/`(.+?)`/g, '$1')
+        .replace(/\[(.+?)\]\(.+?\)/g, '$1');
+    }
+
+    function escapeHtml(s) {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
