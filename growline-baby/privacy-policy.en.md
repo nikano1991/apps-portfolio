@@ -1,6 +1,6 @@
 # Privacy Policy — GrowlineBaby
 
-_Last updated: 9 May 2026_
+_Last updated: 7 June 2026_
 
 GrowlineBaby ("the app") is built with privacy as a first principle. This page explains what data the app handles and how.
 
